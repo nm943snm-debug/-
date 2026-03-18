@@ -238,41 +238,6 @@ Sub 地形生成()
     Application.Calculation = xlCalculationAutomatic
     Application.EnableEvents = True
 End Sub
-Sub 載入圖片()
-    Dim rng As Range
-    Dim chartObj As ChartObject
-    Dim filePath As String
-    Dim fileName As String
-    Application.ScreenUpdating = False
-    ' 1. 設定要轉換的儲存格範圍
-    Set rng = Sheets("工作表2").Range("A1:TT900") ' 或者指定範圍，例如 Range("A1:D10")
-    s = Sheets("工作表1").Cells(1, 1).Value
-    ' 2. 設定儲存路徑與檔名 (預設存在桌面)
-    filePath = ThisWorkbook.Path & "\新增資料夾\ing" & s & ".jpg"
-
-    ' 3. 將儲存格範圍複製成圖片格式
-    rng.CopyPicture Appearance:=xlScreen, Format:=xlPicture
-
-    ' 4. 建立一個暫時的圖表容器，大小需與範圍一致
-    Set chartObj = ActiveSheet.ChartObjects.Add(Left:=rng.Left, Top:=rng.Top, _
-                                              Width:=rng.Width, Height:=rng.Height)
-    
-    ' 5. 將圖片貼入圖表並匯出
-    With chartObj
-        .Select
-        .Chart.Paste
-        .Chart.Export fileName:=filePath, FilterName:="PNG"
-    End With
-
-    ' 6. 刪除暫時產生的圖表物件
-    chartObj.Delete
-
-    MsgBox "圖片已成功儲存至：" & vbCrLf & filePath
-End Sub
-Sub fffop()
-    UY1.Show vbModeless
-    Mod4.fof
-End Sub
 Sub 載入次地圖()
     Dim cw As Long, dj As Long, nno As Long, aa As Long, bb As Long, cc As Long, dd As Long, oo As Long
     cw = Sheets("工作表6").Range("CW1").Value
