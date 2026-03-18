@@ -139,6 +139,7 @@ Sub 地形生成()
             End Select
         Next c
     Next r
+    Sheets("工作表9").Cells(1, 1).Resize(900, 540).Value = result
     Dim filePath As String
     Dim fileNum As Integer
     Dim rowData(1 To 900) As String ' 臨時存放每一列的數據
