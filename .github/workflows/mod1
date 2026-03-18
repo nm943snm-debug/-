@@ -238,37 +238,3 @@ Sub 地形生成()
     Application.Calculation = xlCalculationAutomatic
     Application.EnableEvents = True
 End Sub
-Sub 載入次地圖()
-    Dim cw As Long, dj As Long, nno As Long, aa As Long, bb As Long, cc As Long, dd As Long, oo As Long
-    cw = Sheets("工作表6").Range("CW1").Value
-    dj = Sheets("工作表6").Range("DJ1").Value
-    If dj = 0 Then: dj = 1
-    If cw = 0 Then: cw = 1
-    If dj > 540 Then: dj = 540
-    If cw > 900 Then: cw = 900
-    Dim wsSource As Worksheet
-    Dim wsDest As Worksheet
-    Set ws2 = Sheets("工作表2")
-    Set ws6 = Sheets("工作表6")
-    ws6.Cells(1, 1).Resize(100, 100).Interior.color = ws2.Cells(cw, dj).Interior.color
-End Sub
-Sub 草地邏輯()
-    For c = 2 To 549
-        For r = 2 To 909
-            If thow(c, r) < 0 Then
-                n = Int((4 - 1 + 1) * Rnd + 1)
-                Select Case n
-                    Case 1
-                    If 2000 > thow(c, r + 1) > 0 Then: tow(c, r + 1) = 10000
-                    Case 2
-                    If 2000 > thow(c + 1, r) > 0 Then: tow(c + 1, r) = 10000
-                    Case 3
-                    If 2000 > thow(c - 1, r) > 0 Then: tow(c - 1, r) = 10000
-                    Case 4
-                    If 2000 > thow(c, r - 1) > 0 Then: tow(c, r + 1) = 10000
-                End Select
-            Else
-            End If
-        Next r
-    Next c
-End Sub
