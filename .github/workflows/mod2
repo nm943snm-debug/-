@@ -1,0 +1,10 @@
+Public y As Double, m As Double, D As Double, h As Double, min As Double, s As Double, n As Double, c As Double, r As Double
+Public g As Double, preS As Double, p As Double, IsRunning As Boolean, tow(1 To 550, 1 To 910) As Double, thow(1 To 550, 1 To 910) As Double, tho(1 To 550, 1 To 910) As Double, th(1 To 550, 1 To 910) As Double, yhow(1 To 540, 1 To 900) As Double
+Public A As Double, b As Double, F As Double, E As Double, yed As Byte, M4A As Double, M5A(1 To 540, 1 To 900) As Double, tos(1 To 540, 1 To 900) As Double, tw As Integer, edu As Integer, jes As Integer, yoyo(1 To 900, 1 To 540, 1 To 100) As Long
+' 如果是 64 位元 Office (現在多數人的版本)
+#If VBA7 Then
+    Public Declare PtrSafe Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As LongPtr)
+' 如果是舊版 32 位元 Office
+#Else
+    Public Declare Sub Sleep Lib "kernel32" (ByVal dwMilliseconds As Long)
+#End If
