@@ -214,7 +214,7 @@ Sub 地形生成()
     s = Sheets("工作表1").Cells(1, 3).Value
     Sheets("工作表1").Cells(1, 3).Value = Sheets("工作表1").Cells(1, 3).Value + 1
     ' 2. 設定儲存路徑與檔名 (預設存在桌面)
-    filePath = ThisWorkbook.Path & "\新增資料夾\ing" & s & ".jpg"
+    filePath = ThisWorkbook.Path & "\新增資料夾\" & s & ".jpg"
 
     ' 3. 將儲存格範圍複製成圖片格式
     rng.CopyPicture Appearance:=xlScreen, Format:=xlPicture
