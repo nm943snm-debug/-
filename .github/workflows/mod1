@@ -1,0 +1,308 @@
+Sub 地形生成()
+    MsgBox "本次生成地形運作一分鐘上下，請耐心等待"
+    Application.ScreenUpdating = False ' 停止畫面更新
+    Application.Calculation = xlCalculationManual ' 停止公式自動計算
+    Application.EnableEvents = False ' 停止事件觸發
+    For c = 1 To 550
+        For r = 1 To 910
+            h = Int((4000 - -4000 + 1) * Rnd + -4000)
+            h = h + 250
+            h = Application.WorksheetFunction.RoundUp(h, 0)
+            tow(c, r) = h
+        Next r
+    Next c
+    For g = 1 To 10
+        For c = 1 To 550
+            For r = 1 To 910
+                n = 1
+                A = tow(c, r)
+                If c - 1 = 0 Then b = 0 Else b = tow(c - 1, r)
+                If r - 1 = 0 Then F = 0 Else F = tow(c, r - 1)
+                If c + 1 = 551 Then D = 0 Else D = tow(c + 1, r)
+                If r + 1 = 911 Then E = 0 Else E = tow(c, r + 1)
+                If b <> 0 Then n = n + 1
+                If F <> 0 Then n = n + 1
+                If D <> 0 Then n = n + 1
+                If E <> 0 Then n = n + 1
+                thow(c, r) = (b + F + D + E + A) / n
+                h = Int((4000 - -4000 + 1) * Rnd + -4000)
+                If thow(c, r) = 0 Then: thow(c, r) = h
+                tow(c, r) = thow(c, r)
+            Next r
+        Next c
+    Next g
+    For c = 1 To 550
+        For r = 1 To 910
+            h = Int((1 - 0.01 + 1) * Rnd + 0.01)
+            th(c, r) = h
+        Next r
+    Next c
+    For g = 1 To 3
+        For c = 1 To 550
+            For r = 1 To 910
+                n = 1
+                A = th(c, r)
+                If c - 1 = 0 Then b = 0 Else b = th(c - 1, r)
+                If r - 1 = 0 Then F = 0 Else F = th(c, r - 1)
+                If c + 1 = 551 Then D = 0 Else D = th(c + 1, r)
+                If r + 1 = 911 Then E = 0 Else E = th(c, r + 1)
+                If b <> 0 Then n = n + 1
+                If F <> 0 Then n = n + 1
+                If D <> 0 Then n = n + 1
+                If E <> 0 Then n = n + 1
+                tho(c, r) = (b + F + D + E + A) / n
+                h = Int((1 - 0.01 + 1) * Rnd + 0.01)
+                If tho(c, r) = 0 Then: tho(c, r) = h
+                th(c, r) = tho(c, r)
+            Next r
+        Next c
+    Next g
+    For c = 1 To 550
+        For r = 1 To 910
+            If 500 > tow(c, r) And tow(c, r) > 101 Then
+                If th(c, r) < 0.3 Then: tow(c, r) = 11000 ' 取沙漠
+                If th(c, r) > 0.7 Then: tow(c, r) = 12000 ' 取森林
+            Else
+            End If
+            Dim foff As Long
+            If tow(c, r) = 12000 Then
+                foff = Int((20000 - 0 + 1) * Rnd + 0)
+                Select Case foff
+                    Case 1 To 15:   tow(c, r) = 13000
+                    Case 16 To 20:  tow(c, r) = 14000
+                    Case 21 To 23:  tow(c, r) = 15000
+                    Case 34 To 53:  tow(c, r) = 16000
+                    Case 54 To 57:  tow(c, r) = 17000
+                    Case 58 To 61:  tow(c, r) = 18000
+                    Case 62 To 64:  tow(c, r) = 19000
+                    Case 65 To 80:  tow(c, r) = 20000
+                    Case 81 To 100: tow(c, r) = 21000
+                    Case Else: tow(c, r) = tow(c, r)
+                End Select
+            Else
+            End If
+        Next r
+    Next c
+    For c = 2 To 549
+        For r = 2 To 909
+            If thow(c, r) < 0 Then
+                n = Int((4 - 1 + 1) * Rnd + 1)
+                Select Case n
+                    Case 1
+                    If 2000 > thow(c, r + 1) > 0 Then: tow(c, r + 1) = 10000
+                    Case 2
+                    If 2000 > thow(c + 1, r) > 0 Then: tow(c + 1, r) = 10000
+                    Case 3
+                    If 2000 > thow(c - 1, r) > 0 Then: tow(c - 1, r) = 10000
+                    Case 4
+                    If 2000 > thow(c, r - 1) > 0 Then: tow(c, r + 1) = 10000
+                End Select
+            Else
+            End If
+        Next r
+    Next c
+    For c = 1 To 900
+        For r = 1 To 540
+            tow(r + 1, c + 1) = Round(tow(r + 1, c + 1), 0)
+            M5A(r, c) = -Int(-(tow(r + 5, c + 5)))
+            tos(r, c) = th(r + 5, c + 5)
+        Next r
+    Next c
+    Sheets("工作表4").Cells(1, 1).Resize(540, 900).Value = tos
+    Dim result(1 To 900, 1 To 540) As Double ' 新增暫存代碼的陣列
+    For r = 1 To 900
+        For c = 1 To 540
+            s = tow(c + 5, r + 5)
+            Select Case s
+                Case -5000 To -4001: result(r, c) = 1
+                Case -4000 To -3001: result(r, c) = 2
+                Case -3000 To -501:  result(r, c) = 3
+                Case -500 To 89:      result(r, c) = 4
+                Case 90 To 100:       result(r, c) = 5
+                Case 101 To 500:     result(r, c) = 11
+                Case 501 To 1000:    result(r, c) = 7 ' 修正：小 To 大
+                Case 1001 To 2000:   result(r, c) = 8 ' 修正：小 To 大
+                Case 2001 To 3000:   result(r, c) = 9 ' 修正：小 To 大
+                Case 3001 To 5000:   result(r, c) = 10 ' 修正：小 To 大
+                Case 10000:          result(r, c) = 11
+                Case 11000:          result(r, c) = 12
+                Case 12000:          result(r, c) = 13
+                Case 13000:          result(r, c) = 14
+                Case 14000:          result(r, c) = 15
+                Case 15000:          result(r, c) = 16
+                Case 16000:          result(r, c) = 17
+                Case 17000:          result(r, c) = 18
+                Case 18000:          result(r, c) = 19
+                Case 19000:          result(r, c) = 20
+                Case 20000:          result(r, c) = 21
+                Case 21000:          result(r, c) = 22
+            End Select
+        Next c
+    Next r
+    Dim filePath As String
+    Dim fileNum As Integer
+    Dim rowData(1 To 900) As String ' 臨時存放每一列的數據
+    Sheets("工作表2").Cells(1, 1).Resize(900, 540).Value = result
+    For r = 1 To 540
+        For c = 1 To 900
+            s = Sheets("工作表2").Cells(c, r).Value
+            Select Case s
+                Case 1
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(34, 64, 124)
+                Case 2
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(55, 103, 199)
+                Case 3
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(47, 146, 191)
+                Case 4
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(125, 218, 231)
+                Case 5
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(251, 226, 117)
+                Case 6
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(177, 107, 31)
+                Case 7
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(165, 165, 165)
+                Case 8
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(125, 125, 125)
+                Case 9
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(71, 71, 71)
+                Case 10
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(230, 230, 230)
+                Case 11
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(147, 213, 147)
+                Case 12
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(251, 226, 163)
+                Case 13
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(0, 164, 0)
+                Case 14
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(232, 194, 152)
+                Case 15
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(219, 219, 219)
+                Case 16
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(255, 255, 0)
+                Case 17
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(123, 123, 123)
+                Case 18
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(236, 113, 239)
+                Case 19
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(49, 201, 49)
+                Case 20
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(151, 228, 255)
+                Case 21
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(69, 69, 69)
+                Case 22
+                Sheets("工作表2").Cells(c, r).Interior.color = RGB(223, 161, 99)
+            End Select
+            Sheets("工作表2").Cells(c, r).Value = ""
+        Next c
+    Next r
+    On Error Resume Next
+    Shell "taskkill /F /IM wmplayer.exe", vbHide
+    On Error GoTo 0
+    On Error Resume Next
+    Shell "taskkill /F /IM wmplayer.exe", vbHide
+    On Error GoTo 0
+    Application.ScreenUpdating = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.EnableEvents = True
+    Dim rng As Range
+    Dim chartObj As ChartObject
+    Dim fileName As String
+    Application.ScreenUpdating = False
+    ' 1. 設定要轉換的儲存格範圍
+    Set rng = Sheets("工作表2").Range("A1:TT900") ' 或者指定範圍，例如 Range("A1:D10")
+    s = Sheets("工作表1").Cells(1, 3).Value
+    Sheets("工作表1").Cells(1, 3).Value = Sheets("工作表1").Cells(1, 3).Value + 1
+    ' 2. 設定儲存路徑與檔名 (預設存在桌面)
+    filePath = ThisWorkbook.Path & "\新增資料夾\ing" & s & ".jpg"
+
+    ' 3. 將儲存格範圍複製成圖片格式
+    rng.CopyPicture Appearance:=xlScreen, Format:=xlPicture
+
+    ' 4. 建立一個暫時的圖表容器，大小需與範圍一致
+    Set chartObj = ActiveSheet.ChartObjects.Add(Left:=rng.Left, Top:=rng.Top, _
+                                              Width:=rng.Width, Height:=rng.Height)
+    
+    ' 5. 將圖片貼入圖表並匯出
+    With chartObj
+        .Select
+        .Chart.Paste
+        .Chart.Export fileName:=filePath, FilterName:="PNG"
+    End With
+
+    ' 6. 刪除暫時產生的圖表物件
+    chartObj.Delete
+
+    MsgBox "圖片已成功儲存至：" & vbCrLf & filePath
+    Application.ScreenUpdating = True
+    Application.Calculation = xlCalculationAutomatic
+    Application.EnableEvents = True
+End Sub
+Sub 載入圖片()
+    Dim rng As Range
+    Dim chartObj As ChartObject
+    Dim filePath As String
+    Dim fileName As String
+    Application.ScreenUpdating = False
+    ' 1. 設定要轉換的儲存格範圍
+    Set rng = Sheets("工作表2").Range("A1:TT900") ' 或者指定範圍，例如 Range("A1:D10")
+    s = Sheets("工作表1").Cells(1, 1).Value
+    ' 2. 設定儲存路徑與檔名 (預設存在桌面)
+    filePath = ThisWorkbook.Path & "\新增資料夾\ing" & s & ".jpg"
+
+    ' 3. 將儲存格範圍複製成圖片格式
+    rng.CopyPicture Appearance:=xlScreen, Format:=xlPicture
+
+    ' 4. 建立一個暫時的圖表容器，大小需與範圍一致
+    Set chartObj = ActiveSheet.ChartObjects.Add(Left:=rng.Left, Top:=rng.Top, _
+                                              Width:=rng.Width, Height:=rng.Height)
+    
+    ' 5. 將圖片貼入圖表並匯出
+    With chartObj
+        .Select
+        .Chart.Paste
+        .Chart.Export fileName:=filePath, FilterName:="PNG"
+    End With
+
+    ' 6. 刪除暫時產生的圖表物件
+    chartObj.Delete
+
+    MsgBox "圖片已成功儲存至：" & vbCrLf & filePath
+End Sub
+Sub fffop()
+    UY1.Show vbModeless
+    Mod4.fof
+End Sub
+Sub 載入次地圖()
+    Dim cw As Long, dj As Long, nno As Long, aa As Long, bb As Long, cc As Long, dd As Long, oo As Long
+    cw = Sheets("工作表6").Range("CW1").Value
+    dj = Sheets("工作表6").Range("DJ1").Value
+    If dj = 0 Then: dj = 1
+    If cw = 0 Then: cw = 1
+    If dj > 540 Then: dj = 540
+    If cw > 900 Then: cw = 900
+    Dim wsSource As Worksheet
+    Dim wsDest As Worksheet
+    Set ws2 = Sheets("工作表2")
+    Set ws6 = Sheets("工作表6")
+    ws6.Cells(1, 1).Resize(100, 100).Interior.color = ws2.Cells(cw, dj).Interior.color
+End Sub
+Sub 草地邏輯()
+    For c = 2 To 549
+        For r = 2 To 909
+            If thow(c, r) < 0 Then
+                n = Int((4 - 1 + 1) * Rnd + 1)
+                Select Case n
+                    Case 1
+                    If 2000 > thow(c, r + 1) > 0 Then: tow(c, r + 1) = 10000
+                    Case 2
+                    If 2000 > thow(c + 1, r) > 0 Then: tow(c + 1, r) = 10000
+                    Case 3
+                    If 2000 > thow(c - 1, r) > 0 Then: tow(c - 1, r) = 10000
+                    Case 4
+                    If 2000 > thow(c, r - 1) > 0 Then: tow(c, r + 1) = 10000
+                End Select
+            Else
+            End If
+        Next r
+    Next c
+End Sub
